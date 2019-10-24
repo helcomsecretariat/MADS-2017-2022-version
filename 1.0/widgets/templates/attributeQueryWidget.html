@@ -1,0 +1,23 @@
+<div>
+  <div class="layerTopGroupMenuClose" style="margin:5px;" data-dojo-attach-point="filterPanelClose"></div>
+  <label for="attributeName">Field:</label>
+  <select name="attributeName" class="selectHeight" data-dojo-attach-point="attributeSelect">
+    <option></option>
+  </select>
+  <label for="operator">Operator:</label>
+  <select name="operator" class="selectHeight" data-dojo-attach-point="operator">
+    <option></option>
+    <option>=</option>
+    <option>!=</option>
+    <option>&lt</option>
+    <option>&gt</option>
+    <option>&lt&gt</option>
+  </select>
+  <label for="uniqueValues">Unique values:</label>
+  <select name="uniqueValues" class="selectHeight" data-dojo-attach-point="uniqueValues">
+    <option></option>
+  </select>
+  <textarea class="attributeQueryTextArea" rows="4" data-dojo-attach-point="attributeQueryTextArea" placeholder="Write a filter expression or construct it using lists above."></textarea>
+  <div class="attributeQueryButton" data-dojo-attach-point="resetButton">Reset</div>
+  <div class="attributeQueryButton" data-dojo-attach-point="filterButton">Filter</div>
+</div>

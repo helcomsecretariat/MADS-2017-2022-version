@@ -1,0 +1,82 @@
+{
+  "proxyUrl": "proxy/proxy.ashx",
+  "map": {
+    "spatialReference": 3035,
+    "center": {"x": 4617002, "y": 4548448},
+    "zoom": 0,
+    "lods": [
+      {"level" : 0, "resolution" : 2645.8386250105837, "scale" : 10000000},
+      {"level" : 1, "resolution" : 1322.9193125052918, "scale" : 5000000},
+      {"level" : 2, "resolution" : 529.1677250021168, "scale" : 2000000},
+      {"level" : 3, "resolution" : 264.5838625010584, "scale" : 1000000},
+      {"level" : 4, "resolution" : 132.2919312505292, "scale" : 500000},
+      {"level" : 5, "resolution" : 66.1459656252646, "scale" : 250000},
+      {"level" : 6, "resolution" : 26.458386250105836, "scale" : 100000},
+      {"level" : 7, "resolution" : 13.229193125052918, "scale" : 50000}
+    ],
+    "basemaps": [
+      {
+        "url": "https://maps.helcom.fi/arcgis/rest/services/MADS/Basemap_TOPO/MapServer",
+        "thumbnail": "TOPO_basemap.png"
+      },
+      {
+        "url": "https://maps.helcom.fi/arcgis/rest/services/MADS/Basemap_BORDERS/MapServer",
+        "thumbnail": "BORDERS_basemap.png"
+      }
+    ],
+
+    "layers": [
+      {
+        "label": "Background",
+        "url": "https://maps.helcom.fi/arcgis/rest/services/MADS/Background/MapServer",
+        "wms": "https://maps.helcom.fi/arcgis/services/MADS/Background/MapServer/WMSServer?request=GetCapabilities&service=WMS"
+      },
+      {
+        "label": "Shipping",
+        "url": "https://maps.helcom.fi/arcgis/rest/services/MADS/Shipping/MapServer",
+        "wms": "https://maps.helcom.fi/arcgis/services/MADS/Shipping/MapServer/WMSServer?request=GetCapabilities&service=WMS"
+      },
+      {
+        "label": "Biodiversity",
+        "url": "https://maps.helcom.fi/arcgis/rest/services/MADS/Biodiversity/MapServer",
+        "wms": "https://maps.helcom.fi/arcgis/services/MADS/Biodiversity/MapServer/WMSServer?request=GetCapabilities&service=WMS"
+      },
+      {
+        "label": "Pressures and human activities",
+        "url": "https://maps.helcom.fi/arcgis/rest/services/MADS/Pressures/MapServer",
+        "wms": "https://maps.helcom.fi/arcgis/services/MADS/Pressures/MapServer/WMSServer?request=GetCapabilities&service=WMS"
+      },
+      {
+        "label": "Monitoring",
+        "url": "https://maps.helcom.fi/arcgis/rest/services/MADS/Sea_environmental_monitoring/MapServer",
+        "wms": "https://maps.helcom.fi/arcgis/services/MADS/Sea_environmental_monitoring/MapServer/WMSServer?request=GetCapabilities&service=WMS"
+      },
+      {
+        "label": "Status assessments",
+        "url": "https://maps.helcom.fi/arcgis/rest/services/MADS/Sea_environmental_status/MapServer",
+        "wms": "https://maps.helcom.fi/arcgis/services/MADS/Sea_environmental_status/MapServer/WMSServer?request=GetCapabilities&service=WMS"
+      }
+    ]
+  },
+
+  "widgets": [
+    {
+      "id": "attrtable",
+      "name": "Attribute table",
+      "url": "widgets/attributeTableWidget",
+      "icon": "attributetable_icon25.png"
+    },
+    {
+      "id": "addwms",
+      "name": "Add WMS",
+      "url": "widgets/wmsWidget",
+      "icon": "wms_icon25.png"
+    },
+    {
+      "id": "legend",
+      "name": "Legend",
+      "url": "widgets/legendWidget",
+      "icon": "legend_icon25.png"
+    }
+  ]
+}

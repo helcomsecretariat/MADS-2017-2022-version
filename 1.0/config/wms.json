@@ -1,0 +1,115 @@
+{
+  "wmslist": [
+    {
+      "label": "International",
+      "services": [
+        {
+          "name": "ICES Web Map Service",
+          "url": "http://map.ices.dk/geoserver/wms"
+        }
+      ]
+    },
+    {
+      "label": "Denmark",
+      "services": [
+        {
+          "name": "GEUS map database - WFS/WMS - Primary projection EPSG:25832",
+          "url": "http://data.geus.dk/geusmap/ows/25832.jsp"
+        },
+        {
+          "name": " Natura 2000 Habitat areas",
+          "url": "http://arealinformation.miljoeportal.dk/gis/services/public/MapServer/WMSServer"
+        }
+      ]
+    },
+    {
+      "label": "Estonia",
+      "services": [
+        {
+          "name": "INSPIRE (AU) - Estonian administrative units and maritime zones (WMS)",
+          "url": "http://inspire.maaamet.ee/arcgis/rest/services/public/au/MapServer/exts/InspireView/service"
+        },
+        {
+          "name": "INSPIRE (TN) - Estonian transport networks: common elements (WMS)",
+          "url": "http://inspire.maaamet.ee/arcgis/rest/services/public/tn_com/MapServer/exts/InspireView/service"
+        },
+        {
+          "name": "INSPIRE (MR) - Estonian mineral resources (WMS)",
+          "url": "http://inspire.maaamet.ee/arcgis/rest/services/public/mr/MapServer/exts/InspireView/service"
+        },
+        {
+          "name": "INSPIRE (US) - Estonian utility and governmental services (WMS)",
+          "url": "http://inspire.maaamet.ee/arcgis/rest/services/public/us/MapServer/exts/InspireView/service"
+        },
+        {
+          "name": "INSPIRE (PS) - Estonian protected sites (WMS)",
+          "url": "http://inspire.maaamet.ee/arcgis/rest/services/public/ps/MapServer/exts/InspireView/service"
+        }
+      ]
+    },
+    {
+      "label": "Finland",
+      "services": [
+        {
+          "name": "INSPIRE View Service for Administrative Units",
+          "url": "https://inspire-wms.maanmittauslaitos.fi/inspire-wms/AU/ows"
+        },
+        {
+          "name": "FTA INSPIRE - View Service (WMS) for Transport Networks",
+          "url": "https://extranet.liikennevirasto.fi/inspirepalvelu/TransportNetworks/wms"
+        },
+        {
+          "name": "INSPIRE_SYKE_SuojellutAlueet",
+          "url": "http://paikkatieto.ymparisto.fi/arcgis/services/INSPIRE/SYKE_SuojellutAlueet/MapServer/WmsServer"
+        },
+        {
+          "name": "Liikennevirasto avoin WMS",
+          "url": "https://extranet.liikennevirasto.fi/inspirepalvelu/avoin/wms"
+        }
+      ]
+    },
+    {
+      "label": "Germany",
+      "services": [
+        {
+          "name": "WMS Verwaltungsgebiete 1:1 000 000",
+          "url": "http://sg.geodatenzentrum.de/wms_vg1000"
+        },
+        {
+          "name": "BSH WMS Seevermessung Seegrenzen",
+          "url": "https://www.geoseaportal.de/wss/service/Seevermessung_DeutscheSeegrenzen/guest"
+        },
+        {
+          "name": "BSH WMS CONTIS Facilities",
+          "url": "https://www.geoseaportal.de/wss/service/CONTIS_Facilities/guest"
+        },
+        {
+          "name": "BSH WMS CONTIS Administration",
+          "url": "https://www.geoseaportal.de/wss/service/CONTIS_Administration/guest"
+        }
+      ]
+    },
+    {
+      "label": "Poland",
+      "services": [
+        {
+          "name": "Polska usługa przeglądania INSPIRE dla tematu Jednostki Administracyjne.",
+          "url": "http://mapy.geoportal.gov.pl/wss/service/INSPIRE_AU/guest"
+        },
+        {
+          "name": "Usługa przeglądania (Web Map Service) Generalnej Dyrekcji Ochrony Środowiska",
+          "url": "http://sdi.gdos.gov.pl/wms"
+        }
+      ]
+    },
+    {
+      "label": "Sweden",
+      "services": [
+        {
+          "name": "INSPIRE View Service",
+          "url": "http://gis-services.metria.se/arcgis/rest/services/nv/InspireNV_N2K/MapServer/exts/InspireView/service"
+        }
+      ]
+    }
+  ]
+}

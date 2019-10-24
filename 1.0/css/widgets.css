@@ -1,0 +1,493 @@
+/* Layer List widget */
+
+#layerlistContainer {
+  position: absolute;
+  top:0px;
+  left: 0px;
+  width: 377px;
+  height: 100%;
+  /*background-color: #FFF;
+  opacity: 0.8;
+  border-right: 2px solid #00365C;*/
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#layerlistSectionsContainer {
+  position: absolute;
+  top:0px;
+  left: 0px;
+  width: 350px;
+  height: 100%;
+  background-color: #FFF;
+  /*opacity: 0.8;*/
+  border-right: 2px solid #00365C;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.collapseExpandLayerList {
+  position: absolute;
+  top: 31px;
+  right: 0px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #FFF;
+  border-right: 2px solid #00365C;
+  border-top: 2px solid #00365C;
+  border-bottom: 2px solid #00365C;
+  border-radius: 2px;
+  width: 25px;
+  height: 25px;
+  display: inline-block;
+  cursor: pointer;
+  z-index: 10;
+}
+
+#collapseLayerList {
+  background-image: url("../img/arrowGreyLeft.png");
+}
+
+#expandLayerList {
+  display: none;
+  background-image: url("../img/arrowGreyRight.png");
+}
+
+#layerSearchSection {
+  top: 20px;
+  left: 10px;
+  position: absolute;
+  width: 320px;
+  border: 1px solid #00365C;
+	border-radius: 4px;
+}
+
+.layerSearchInput {
+	width: 270px;
+	font-size: 16px;
+  background-color: #FFF !important;
+	padding: 5px;
+	border-width: 0;
+  margin:3px;
+}
+
+.layerSearchInput:hover {
+  background-color: #FFF;
+}
+
+/*#layerSearchButton {
+  background-image: url("../img/search25.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 25px;
+  height: 25px;
+  float: right;
+  margin-top: 8px;
+  cursor:pointer;
+}*/
+
+#layerListSection {
+  top: 80px;
+  left: 10px;
+  position: absolute;
+  height: 85%;
+  width: 320px;
+  font-size: 12px;
+  padding: 5px 0px;
+}
+.layerListTree {
+  position: relative;
+  max-height: 90%;
+  overflow: auto;
+}
+
+.layerListButton {
+  cursor: pointer;
+  margin-top: 10px;
+  margin-right: 20px;
+  display: inline-block;
+  float: right;
+  text-decoration: underline;
+  color: #00365C;
+  font-size: 14px;
+}
+
+.layerListButton:hover {
+  font-weight: bold;
+}
+#hideAllButton {
+  /*margin-right: 30px;*/
+}
+
+#clearSelectionButton {
+  display: none;
+}
+
+.claro .dijitTreeRowSelected {
+  background-color: #EBEDEF;
+  border-color: #004A7F;
+}
+
+.claro .dijitTreeRowHover {
+  background-color: #EBEDEF;
+  border-color: #004A7F;
+}
+
+.dijitTreeContent {
+    white-space: normal;
+}
+
+.dijitTreeRow {
+    white-space: normal;
+}
+
+.dijitTreeLabel {
+    margin: 0;
+    vertical-align: middle;
+    display: inline-block;
+    width: 200px;
+}
+
+.selectedTreeNode {
+  background-color: #F00;
+}
+
+.metadataButton {
+  background-image: url("../img/documentIcon16.png");
+  background-repeat: no-repeat;
+  background-position: left;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  cursor: pointer;
+  float: right;
+}
+
+.topGroupButton {
+  background-image: url("../img/downarrow.png");
+  background-repeat: no-repeat;
+  background-position: left;
+  width: 11px;
+  height: 11px;
+  display: inline-block;
+  float: right;
+  margin-right: 5px;
+  margin-top: 3px;
+  cursor: pointer;
+}
+
+.layerTopGroupMenu {
+  width: 160px;
+  /*height: 100px;*/
+  border: 1px solid #00365C;
+  background-color: #fff;
+  position: absolute;
+  padding: 5px;
+  display: none;
+  z-index: 11;
+  font-size: 12px;
+}
+
+.layerTopGroupMenuContainer {
+  width: 80%;
+  margin:auto;
+}
+
+.layerTopGroupMenuClose {
+  float: right;
+  cursor: pointer;
+  width: 10px;
+  height: 10px;
+  background-image: url("../img/menuClose.png");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.layerTopGroupMenuMoveUp {
+  width: 80%;
+  margin:auto;
+  background-image: url("../img/layerUp16.png");
+  background-repeat: no-repeat;
+  background-position: right;
+  cursor: pointer;
+}
+
+.layerTopGroupMenuMoveUp:hover {
+  text-decoration: underline;
+}
+
+.layerTopGroupMenuMoveDown {
+  width: 80%;
+  margin:auto;
+  background-image: url("../img/layerDown16.png");
+  background-repeat: no-repeat;
+  background-position: right;
+  cursor: pointer;
+}
+
+.layerTopGroupMenuMoveDown:hover {
+  text-decoration: underline;
+}
+
+.layerTopGroupMenuWmsLink {
+  width: 20%;
+  margin:auto;
+  margin-top: 10px;
+  display: block;
+  text-decoration: none;
+  color: #004A7F;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.layerTopGroupMenuWmsLink:hover {
+  color: #F39C12;
+}
+.layerTopGroupMenuLabels {
+  /*font-size: 12px;*/
+}
+
+.claro .dijitRuleLabelsContainer {
+  color: #444;
+}
+.claro .dijitTooltipContainer {
+    /*background: #b8b5b5;*/
+    color: #004A7F;
+    font-size: 11px;
+    padding: 5px;
+ }
+
+.legendContainerDiv {
+  display: none;
+}
+
+.legendRow {
+  margin: 0;
+  margin-bottom: 5px;
+  padding: 0;
+  vertical-align: middle;
+  min-height: 20px;
+  background-repeat: no-repeat;
+  background-position: left;
+  font-size: 11px;
+}
+
+.legendImage {
+  background-repeat: no-repeat;
+  background-position: left;
+  margin-left: 20px;
+  display: inline-block;
+}
+
+.legendLabel {
+  margin-left: 4px;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: normal;
+  font-size: 11px;
+}
+
+.dijitComboBoxMenu .dijitMenuItem {
+ font-size: 12px;
+}
+
+/* Coords widget */
+
+.coordsWidget {
+  position: absolute;
+  bottom:10px;
+  right: 200px;
+  color: #656565;
+  font-size: 10px;
+}
+
+/* Scale widget */
+
+.scaleWidget {
+  position: absolute;
+  bottom: 10px;
+  right: 90px;
+  color: #656565;
+  font-size: 12px;
+}
+
+/* Clear selection widget */
+
+.mapWidget {
+  width: 30px;
+  height: 30px;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 5px;
+  border: 1px solid #57585A;
+  cursor: pointer;
+}
+
+/* Legend widget */
+
+#legendID {
+  margin: 10px;
+  font-size: 12px;
+}
+
+.legendSection {
+  margin-bottom: 10px;
+}
+
+/* WMS widget */
+
+#wmsInputSection {
+  margin: 10px;
+  font-size: 12px;
+}
+
+#wmsSelect {
+  font-size: 12px;
+  /*background-color: #FFF !important;*/
+	padding: 5px;
+  border: 1px solid #00365C;
+	margin-top: 3px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+#wmsSearchInput {
+	width: 100%;
+	font-size: 12px;
+	padding: 5px 0;
+  border: 1px solid #00365C;
+	border-radius: 4px;
+  margin-top: 3px;
+  float: right;
+}
+
+#wmsSearchButton {
+  float: right;
+  color:green;
+  font-size: 14px;
+  background-color: transparent;
+  line-height: 27px;
+  min-width: 80px;
+  vertical-align: middle;
+  border: 1px dashed #00365C;
+  border-radius: 5px;
+  margin-left: 10px;
+  margin-top: 10px;
+  cursor:pointer;
+}
+
+#wmsSearchButton:hover {
+  border: 1px solid #00365C;
+  font-weight: bold;
+}
+
+#wmsRequestMessage {
+  color: red;
+}
+
+.wmsToolButton {
+  float: right;
+  color: #00365C;
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: underline;
+}
+
+.wmsToolButton:hover {
+  font-weight: bold;
+}
+#wmsClearLayerList {
+  margin-right: 10px;
+  display: none;
+}
+
+#wmsLayerListSection {
+  display: none;
+  margin: 10px;
+  font-size: 12px;
+}
+.wmsItem {
+  clear: both;
+  margin-bottom: 10px
+}
+
+.wmsLayerContainer {
+  border-bottom: 1px dotted #cccccc;
+  width: 98%;
+  padding-top: 5px;
+}
+
+.wmsLayerTitle {
+  width: 70%;
+  word-wrap: break-word;
+  display: inline-block;
+}
+
+.wmsLayerCheckbox {
+  float: right;
+}
+
+.wmsLayerLegend {
+  clear:both;
+}
+
+.wmsLayerAddButton {
+  cursor: pointer;
+  float: right;
+  background-color: #d9dde0;
+  line-height: 16px;
+  border: 0px dashed #d9dde0;
+  border-radius: 3px;
+  vertical-align: middle;
+  font-size: 10px;
+  color:green;
+}
+
+.wmsLayerAddButton:hover {
+  font-weight: bold;
+}
+
+.attributeTableWidget {
+  height: 100%;
+}
+
+.attributeQueryWidget {
+  position: absolute;
+  top: 65px;
+  right: 26px;
+  background-color: #fff;
+  border: 1px solid black;
+  padding: 5px;
+  display: none;
+}
+
+.attributeQueryTextArea {
+  width: 98%;
+  resize: none;
+  float: right;
+}
+
+.attributeQueryButton {
+  color: #004A7F;
+  float: right;
+  margin-right: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.attributeQueryButton:hover {
+  color: #F39C12;
+}
+
+.selectHeight {
+  max-height: 100px;
+}
+
+/*#attrTableTabs {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}*/
