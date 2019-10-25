@@ -1,7 +1,7 @@
 # MADS
 Helcom Map and Data service contains spatial data collected within HELCOM data collection framework and related projects as outlined in HELCOM Monitoring and Assessment Strategy. Use conditions of spatial data in the map service are map layer specific. Users are entitled to view use constrains defined in metadata record of each map in the HELCOM Metadata catalogue and cite the resource accordingly.
 
-    Copyright (C) 2017  Andžej Miloš, Helcom
+    Copyright (C) 2017  Helcom
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,4 +16,4 @@ Helcom Map and Data service contains spatial data collected within HELCOM data c
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-Let us know if you want to use MADS or have any questions at helcom.data@helcom.fi
+Let us know if you have any questions at data@helcom.fi
