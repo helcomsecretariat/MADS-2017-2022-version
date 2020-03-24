@@ -92,7 +92,7 @@ define([
         }.bind(this)));
 
         // on map click
-        on(this.mapa, "click", lang.hitch(this, function(evt){
+        on(this.mapa, "click", lang.hitch(this, function(evt) {
           domStyle.set(dojo.byId("loadingCover"), {"display": "block"});
           query('*').style('cursor', 'wait');
           // hide related table link before showing popup
@@ -118,7 +118,7 @@ define([
     addOperationalLayers: function(layers) {
       on(this.mapa, "layers-add-result", lang.hitch(this, function(e) {
         // create layer list
-        setTimeout(lang.hitch(this, function(){
+        setTimeout(lang.hitch(this, function() {
           var layerlistContainer = dom.byId("layerlistContainer");
           var llwidget = new layerlistWidget({map: this.mapa}).placeAt(layerlistContainer);
           // Store widget object to get Identify Tasks
@@ -128,7 +128,7 @@ define([
 
         //domStyle.set(dojo.byId("loadingContainer"), {"display": "none"});
 
-        on(layerlistContainer, "click", lang.hitch(this, function(evt){
+        on(layerlistContainer, "click", lang.hitch(this, function(evt) {
           // hide layer top group menu
           query(".layerTopGroupMenu").forEach(function(node){
             domStyle.set(node, {"display": "none"});

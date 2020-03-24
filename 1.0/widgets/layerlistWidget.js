@@ -438,7 +438,6 @@ define([
                 });
               }
               else {
-                console.log(attributeTable.featureTable);
                 if ((!attributeTable.tableDestroyed) && (attributeTable.featureTable)){
                   attributeTable.featureTable.destroy();
                   attributeTable.tabContainer.removeChild(attributeTable.tabPane);

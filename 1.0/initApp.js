@@ -53,6 +53,7 @@ define([
     },
 
     requestSucceeded: function(response, io) {
+      console.log(response);
       // set up proxy page
       esriConfig.defaults.io.proxyUrl = madsVersion + "/" + response.proxyUrl;
       // create map manager
