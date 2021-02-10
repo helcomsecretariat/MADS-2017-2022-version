@@ -53,11 +53,10 @@ define([
     },
 
     requestSucceeded: function(response, io) {
-      console.log(response);
       // set up proxy page
       esriConfig.defaults.io.proxyUrl = madsVersion + "/" + response.proxyUrl;
       // create map manager
-      this.mM = new mapManager({mapNode: "map", mapConfig: response.map});
+      this.mM = new mapManager({mapNode: "map", mapConfig: response.map, metadataIdsUrl: response.metadataIds});
       this.mM.mapa.on("load", lang.hitch(this, function(e) {
         // add layers to the map (read from config)
         this.mM.addOperationalLayers(response.map.layers);

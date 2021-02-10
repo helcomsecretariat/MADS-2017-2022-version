@@ -59,6 +59,8 @@
     ]
   },
 
+  "metadataIds": "https://maps.helcom.fi/arcgis/rest/services/MADS/MADS_admin/GPServer/Get%20metadata%20ids%20for%20mads",
+
   "widgets": [
     {
       "id": "attrtable",

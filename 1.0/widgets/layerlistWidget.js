@@ -2,7 +2,7 @@ define([
   "dojo/_base/declare", "dojo/_base/fx", "dojo/_base/lang", "dojo/dom-style", "dojo/mouse", "dojo/dom-class", "dojo/_base/window",
   "dojo/on", "dojo/dom", "dojo/dom-construct", "dojo/_base/array", "dojo/query!css3", "dijit/registry",
   "dojo/store/Memory","dijit/tree/ObjectStoreModel", "dijit/Tree", "dijit/form/FilteringSelect",
-  "esri/request", "esri/tasks/IdentifyTask", "esri/tasks/IdentifyParameters",
+  "esri/request", "esri/tasks/IdentifyTask", "esri/tasks/IdentifyParameters", "esri/tasks/Geoprocessor",
   "dijit/form/HorizontalSlider", "dijit/form/HorizontalRule", "dijit/form/HorizontalRuleLabels", "dijit/form/CheckBox", "dijit/Tooltip",
   "dijit/layout/TabContainer",
   "mads/js/queryFeaturesManager", "widgets/attributeTableWidget",
@@ -11,7 +11,7 @@ define([
 ], function(declare, baseFx, lang, domStyle, mouse, domClass, win,
   on, dom, domConstruct, array, query, registry,
   Memory, ObjectStoreModel, Tree, FilteringSelect,
-  esriRequest, IdentifyTask, IdentifyParameters,
+  esriRequest, IdentifyTask, IdentifyParameters, Geoprocessor,
   HorizontalSlider, HorizontalRule, HorizontalRuleLabels, checkBox, Tooltip,
   TabContainer,
   queryFeaturesManager, attributeTableWidget,
@@ -25,12 +25,14 @@ define([
     store: null,
     data: [{ id: 'layerlist', leaf: false}],
     legendInfo: {},
+    metadataIdsUrl: null,
     metadataIDS: {},
     identify: {},
     visitedNodesIds: {},
     addingLayer: false,
     constructor: function(params) {
       this.map = params.map;
+      this.metadataIdsUrl = params.metadataIdsUrl
     },
 
     postCreate: function() {
@@ -135,20 +137,38 @@ define([
     },
 
     getMetadataIDS: function() {
-      var windowUrl = window.location.pathname;
-      windowUrl = windowUrl.replace("index.html", "");
-      var requestHandle = esriRequest({
-        url: windowUrl + madsVersion + "/config/metadataIDS.json?version=" + metadataIDSversion,
-        handleAs: "json"
-      });
-      requestHandle.then(lang.hitch(this, function(response) {
-        this.metadataIDS = response;
-        this.setupLayerListAndDisplayLayer();
-      }), lang.hitch(this, function(error) {
-        console.log("Error. Can't get metadata IDs. Error message: ", error.message);
-        this.setupLayerListAndDisplayLayer();
-      }));
-    },
+			var gp = new Geoprocessor(this.metadataIdsUrl);
+			var params = {};
+			gp.submitJob(params, gpJobComplete, gpJobStatus, gpJobFailed);
+			var that = this;
+
+			function gpJobComplete(jobinfo) {
+				if (jobinfo.jobStatus == "esriJobSucceeded") {
+					gp.getResultData(jobinfo.jobId, "result", function(data) {
+            that.metadataIDS = data.value;
+            that.setupLayerListAndDisplayLayer();
+		      });
+				}
+				else {
+					alert("Unable to get metadata links data. Try to reload page and run the tool again. Contact administrator at data@helcom.fi if alert appears again.");
+				}
+			}
+
+			function gpJobStatus(jobinfo) {
+				switch (jobinfo.jobStatus) {
+	        case 'esriJobSubmitted':
+	          break;
+	        case 'esriJobExecuting':
+	          break;
+	        case 'esriJobSucceeded':
+	          break;
+	      }
+			}
+
+			function gpJobFailed(error) {
+				alert("Unable to get metadata links data. Try to reload page and run the tool again. Contact administrator at data@helcom.fi if alert appears again.");
+			}
+		},
 
     setupLayerListAndDisplayLayer: function() {
       this.createDataArray();
@@ -438,6 +458,7 @@ define([
                 });
               }
               else {
+                console.log(attributeTable.featureTable);
                 if ((!attributeTable.tableDestroyed) && (attributeTable.featureTable)){
                   attributeTable.featureTable.destroy();
                   attributeTable.tabContainer.removeChild(attributeTable.tabPane);

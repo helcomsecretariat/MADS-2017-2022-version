@@ -19,6 +19,7 @@ define([
     mapa: null,
     // Layer list object (required for Identify)
     layerListObj: null,
+    metadataIdsUrl: null,
     // store clicked location for displaying popup
     clickPoint: null,
     // graphic layer for identified point features
@@ -26,6 +27,7 @@ define([
     currentExtent: null,
     relatedAttributeTable: null,
     constructor: function(params) {
+      this.metadataIdsUrl = params.metadataIdsUrl;
       // create popup
       var popup = new Popup({
         // fill symbol for polygon features
@@ -120,7 +122,7 @@ define([
         // create layer list
         setTimeout(lang.hitch(this, function() {
           var layerlistContainer = dom.byId("layerlistContainer");
-          var llwidget = new layerlistWidget({map: this.mapa}).placeAt(layerlistContainer);
+          var llwidget = new layerlistWidget({map: this.mapa, metadataIdsUrl: this.metadataIdsUrl}).placeAt(layerlistContainer);
           // Store widget object to get Identify Tasks
           this.layerListObj = llwidget;
         }), 1000);
@@ -195,157 +197,166 @@ define([
     },
 
     showIdentifyResults: function(r) {
-      //console.log("r", r);
       var results = [];
+      let identifyFailed = false;
       r = dojo.filter(r, function (result) {
         return r[0];
       }); //filter out any failed tasks
       //var result = r[r.length-1][1];
       for (i=0;i<r.length;i++) {
-        results = results.concat(r[i][1]);
+        if (!r[i][0]) {
+          identifyFailed = true;
+        }
+        else {
+          results = results.concat(r[i][1]);
+        }
       }
+      if (!identifyFailed) {
+        // Identified object top most layer in top most service
+        var result = results[results.length-1];
+        // Identify object from Layer List
+        var identify = this.mM.layerListObj.identify;
 
-      // Identified object top most layer in top most service
-      var result = results[results.length-1];
-      // Identify object from Layer List
-      var identify = this.mM.layerListObj.identify;
+        if (result) {
+          var mapLayers = this.mM.mapa.getLayersVisibleAtScale();
+          array.some(mapLayers, lang.hitch(this, function(mapLayer) {
+            if ((mapLayer.visibleLayers) && (!mapLayer.tileInfo)) {
+              if (mapLayer.visibleLayers.includes(result.layerId)) {
+                array.forEach(mapLayer.layerInfos, lang.hitch(this, function(info) {
+                  if ((info.name == result.layerName) && (info.id == result.layerId)) {
+                    var requestHandle = esriRequest({
+                      url: mapLayer.url+"/"+result.layerId+"?f=json",
+                      handleAs: "json"
+                    });
+              			requestHandle.then(lang.hitch(this, function (response) {
+                        if (response.relationships.length > 0) {
+                          array.forEach(response.relationships, lang.hitch(this, function(rel) {
+                            // create related table link in popup
+                            var link = domConstruct.create("a", {
+                              "class": " action relatedTablelink",
+                              "style": "display: block",
+                              "innerHTML": rel.name,
+                              "href": "javascript: void(0);"
+                            }, query(".actionList", this.mM.mapa.infoWindow.domNode)[0]);
 
-
-      if (result) {
-        var mapLayers = this.mM.mapa.getLayersVisibleAtScale();
-        array.some(mapLayers, lang.hitch(this, function(mapLayer) {
-          if ((mapLayer.visibleLayers) && (!mapLayer.tileInfo)) {
-            if (mapLayer.visibleLayers.includes(result.layerId)) {
-              array.forEach(mapLayer.layerInfos, lang.hitch(this, function(info) {
-                if ((info.name == result.layerName) && (info.id == result.layerId)) {
-                  var requestHandle = esriRequest({
-                    url: mapLayer.url+"/"+result.layerId+"?f=json",
-                    handleAs: "json"
-                  });
-            			requestHandle.then(lang.hitch(this, function (response) {
-                      if (response.relationships.length > 0) {
-                        array.forEach(response.relationships, lang.hitch(this, function(rel) {
-                          // create related table link in popup
-                          var link = domConstruct.create("a", {
-                            "class": " action relatedTablelink",
-                            "style": "display: block",
-                            "innerHTML": rel.name,
-                            "href": "javascript: void(0);"
-                          }, query(".actionList", this.mM.mapa.infoWindow.domNode)[0]);
-
-                          on(link, "click", lang.hitch(this, function () {
-                            var rel_field_name = null;
-                            var rel_field_alias = null;
-                            var rel_field_type = null;
-                            //var rel = response.relationships[0];
-                            array.some(response.fields, lang.hitch(this, function(field) {
-                              if (field.name == rel.keyField) {
-                                rel_field_name = field.name;
-                                rel_field_alias = field.alias;
-                                rel_field_type = field.type;
-                                return false;
+                            on(link, "click", lang.hitch(this, function () {
+                              var rel_field_name = null;
+                              var rel_field_alias = null;
+                              var rel_field_type = null;
+                              //var rel = response.relationships[0];
+                              array.some(response.fields, lang.hitch(this, function(field) {
+                                if (field.name == rel.keyField) {
+                                  rel_field_name = field.name;
+                                  rel_field_alias = field.alias;
+                                  rel_field_type = field.type;
+                                  return false;
+                                }
+                              }));
+                              if (result.feature.attributes[rel_field_name]) {
+                                this.mM.getRelatedRecords(mapLayer.url, rel.relatedTableId, rel.name, rel_field_name, rel_field_alias, rel_field_type, result.feature.attributes[rel_field_name]);
                               }
-                            }));
-                            if (result.feature.attributes[rel_field_name]) {
-                              this.mM.getRelatedRecords(mapLayer.url, rel.relatedTableId, rel.name, rel_field_name, rel_field_alias, rel_field_type, result.feature.attributes[rel_field_name]);
-                            }
-                            else if (result.feature.attributes[rel_field_alias]) {
-                              this.mM.getRelatedRecords(mapLayer.url, rel.relatedTableId, rel.name, rel_field_name, rel_field_alias, rel_field_type, result.feature.attributes[rel_field_alias]);
-                            }
-                            else {
-                              alert("Can't get related records.");
-                            }
-                  				}));
-                        }));
-                      }
-                  	}),
-                  	lang.hitch(this, function (error) {
-            					console.log(error);
-            				})
-                  );
-                }
-              }));
-              return false;
+                              else if (result.feature.attributes[rel_field_alias]) {
+                                this.mM.getRelatedRecords(mapLayer.url, rel.relatedTableId, rel.name, rel_field_name, rel_field_alias, rel_field_type, result.feature.attributes[rel_field_alias]);
+                              }
+                              else {
+                                alert("Can't get related records.");
+                              }
+                    				}));
+                          }));
+                        }
+                    	}),
+                    	lang.hitch(this, function (error) {
+              					console.log(error);
+              				})
+                    );
+                  }
+                }));
+                return false;
+              }
             }
-          }
-        }));
-        var res = dojo.map([result], function(result) {
-          var feature = result.feature;
-          var fieldInfos = [];
+          }));
+          var res = dojo.map([result], function(result) {
+            var feature = result.feature;
+            var fieldInfos = [];
 
-          // if identified layer is raster layer - display just Pixel Value in the popup
-          if (result.geometryType == "esriGeometryPoint" && feature.attributes["Pixel Value"]) {
-            var fieldInfo = {
-              fieldName: "Pixel Value",
-              visible: true,
-              label: "Value:"
-            };
-            fieldInfos.push(fieldInfo);
-          }
-          // display attributtes in popup
-          else {
-            /*if (feature.attributes.hasOwnProperty("OBJECTID_12")) {
-              objID = {
-                "name": "OBJECTID_12",
-                "value": feature.attributes["OBJECTID_12"]
-              }
+            // if identified layer is raster layer - display just Pixel Value in the popup
+            if (result.geometryType == "esriGeometryPoint" && feature.attributes["Pixel Value"]) {
+              var fieldInfo = {
+                fieldName: "Pixel Value",
+                visible: true,
+                label: "Value:"
+              };
+              fieldInfos.push(fieldInfo);
             }
-            else if (feature.attributes.hasOwnProperty("OBJECTID_1")) {
-              objID = {
-                "name": "OBJECTID_1",
-                "value": feature.attributes["OBJECTID_1"]
-              }
-            }
-            else if (feature.attributes.hasOwnProperty("OBJECTID")) {
-              objID = {
-                "name": "OBJECTID",
-                "value": feature.attributes["OBJECTID"]
-              }
-            }*/
-
-            var excludeInPopup = ["OBJECTID", "OBJECTID_1", "OBJECTID_12","Shape", "SHAPE", "Shape_Length", "SHAPE_Length", "Shape_Area", "SHAPE_Area"];
-            for (var attribute in feature.attributes) {
-              if (feature.attributes.hasOwnProperty(attribute)) {
-                if (excludeInPopup.indexOf(attribute) === -1) {
-                  var fieldInfo = {
-                    fieldName: attribute,
-                    visible: true,
-                    label: attribute+":"
-                  };
-                  fieldInfos.push(fieldInfo);
+            // display attributtes in popup
+            else {
+              /*if (feature.attributes.hasOwnProperty("OBJECTID_12")) {
+                objID = {
+                  "name": "OBJECTID_12",
+                  "value": feature.attributes["OBJECTID_12"]
                 }
               }
-            }
-            // create symbol for marker objects
-            if (result.geometryType == "esriGeometryPoint") {
-              this.mM.selectedGraphics.clear();
-              var symbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_SQUARE, 20,
-                            new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
-                            new Color([0,0,0,0.0]), 0),
-                            new Color([0,0,0,0.0]));
-              feature.symbol = symbol;
-              this.mM.selectedGraphics.add(feature);
-            }
-          }
-          var template = new PopupTemplate({
-            title: result.layerName,
-            fieldInfos: fieldInfos
-          }); //Select template based on layer name
+              else if (feature.attributes.hasOwnProperty("OBJECTID_1")) {
+                objID = {
+                  "name": "OBJECTID_1",
+                  "value": feature.attributes["OBJECTID_1"]
+                }
+              }
+              else if (feature.attributes.hasOwnProperty("OBJECTID")) {
+                objID = {
+                  "name": "OBJECTID",
+                  "value": feature.attributes["OBJECTID"]
+                }
+              }*/
 
-          feature.setInfoTemplate(template);
-          return feature;
-        });
+              var excludeInPopup = ["OBJECTID", "OBJECTID_1", "OBJECTID_12","Shape", "SHAPE", "Shape_Length", "SHAPE_Length", "Shape_Area", "SHAPE_Area"];
+              for (var attribute in feature.attributes) {
+                if (feature.attributes.hasOwnProperty(attribute)) {
+                  if (excludeInPopup.indexOf(attribute) === -1) {
+                    var fieldInfo = {
+                      fieldName: attribute,
+                      visible: true,
+                      label: attribute+":"
+                    };
+                    fieldInfos.push(fieldInfo);
+                  }
+                }
+              }
+              // create symbol for marker objects
+              if (result.geometryType == "esriGeometryPoint") {
+                this.mM.selectedGraphics.clear();
+                var symbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_SQUARE, 20,
+                              new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                              new Color([0,0,0,0.0]), 0),
+                              new Color([0,0,0,0.0]));
+                feature.symbol = symbol;
+                this.mM.selectedGraphics.add(feature);
+              }
+            }
+            var template = new PopupTemplate({
+              title: result.layerName,
+              fieldInfos: fieldInfos
+            }); //Select template based on layer name
 
-        this.mM.mapa.infoWindow.setFeatures(res);
-        /*var link = domConstruct.create("div",{
-                //"class": "action",
-                "id": "statsLink",
-                "innerHTML": "Link: http://localhost:8080/MADS/?datasetID=fbfb04b6-5cd0-4bad-8347-674a63e28855&features=ID:149370", //text that appears in the popup for the link
-                //"href": "javascript: void(0);"
-              }, query(".mainSection", this.mM.mapa.infoWindow.domNode)[0]);*/
-        this.mM.mapa.infoWindow.show(this.mM.clickPoint);
-        domStyle.set(dojo.byId("loadingCover"), {"display": "none"});
-        query('*').style('cursor', '');
+            feature.setInfoTemplate(template);
+            return feature;
+          });
+
+          this.mM.mapa.infoWindow.setFeatures(res);
+          /*var link = domConstruct.create("div",{
+                  //"class": "action",
+                  "id": "statsLink",
+                  "innerHTML": "Link: http://localhost:8080/MADS/?datasetID=fbfb04b6-5cd0-4bad-8347-674a63e28855&features=ID:149370", //text that appears in the popup for the link
+                  //"href": "javascript: void(0);"
+                }, query(".mainSection", this.mM.mapa.infoWindow.domNode)[0]);*/
+          this.mM.mapa.infoWindow.show(this.mM.clickPoint);
+          domStyle.set(dojo.byId("loadingCover"), {"display": "none"});
+          query('*').style('cursor', '');
+        }
+        else {
+          domStyle.set(dojo.byId("loadingCover"), {"display": "none"});
+          query('*').style('cursor', '');
+        }
       }
       else {
         domStyle.set(dojo.byId("loadingCover"), {"display": "none"});
